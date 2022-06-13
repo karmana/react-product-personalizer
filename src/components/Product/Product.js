@@ -13,6 +13,15 @@ const Product = props => {
     return styles['color' + color[0].toUpperCase() + color.substr(1).toLowerCase()];
   }
 
+  const handleSubmit = e => {
+    e.preventDefault();
+  }
+
+  const getPrice = () => {
+    const sizePrice = props.sizes.find(element => element.name === currentSize);
+    return props.basePrice + sizePrice.additionalPrice;
+  }
+
   return (
     <article className={styles.product}>
       <div className={styles.imageContainer}>
@@ -24,7 +33,7 @@ const Product = props => {
       <div>
         <header>
           <h2 className={styles.name}>{props.title}</h2>
-          <span className={styles.price}>Price: {props.basePrice}$</span>
+          <span className={styles.price}>Price: {getPrice()}$</span>
         </header>
         <form>
           <div className={styles.sizes}>
@@ -44,7 +53,8 @@ const Product = props => {
             <ul className={styles.choices}>
             {props.colors.map(color => 
               <li key={shortid()}>
-                <button type="button" 
+                <button handleSubmit={handleSubmit}
+                        type="button" 
                         onClick={() => setCurrentColor(color)} 
                         className={clsx(prepareColorClassName(color), currentColor === color && styles.active)}>{color.name}
                 </button>
